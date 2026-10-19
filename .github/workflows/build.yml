@@ -24,6 +24,7 @@ jobs:
         with:
           combine: true
           target: ${{ matrix.config.target }}
+          sdk: 'v3.13.0'
   package:
     name: Package builds
     runs-on: ubuntu-latest
