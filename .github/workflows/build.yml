@@ -13,7 +13,7 @@ jobs:
           - name: Windows
             os: windows-latest
           - name: iOS
-            os: macos-14
+            os: macos-13
             target: iOS
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
