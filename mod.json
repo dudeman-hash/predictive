@@ -1,7 +1,9 @@
 {
 	"geode": "5.11.2",
 	"gd": {
-		"win": "2.2081"
+		"win": "2.2081",
+		"ios": "2.2074",
+		"android": "2.2074"
 	},
 	"version": "v4.7.0",
 	"id": "tuusuario.predictive-input-buffer",
