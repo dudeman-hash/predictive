@@ -13,7 +13,7 @@ struct DelayedInput {
 
 std::queue<DelayedInput> g_inputQueue;
 int g_currentTick = 0;
-int g_stage = 1; // Default to Stage 1 since F6 doesn't exist on iOS touchscreens
+int g_stage = 1; 
 
 int getRequiredTicks(bool isWave) {
     if (g_stage == 0) return 0;
@@ -22,6 +22,11 @@ int getRequiredTicks(bool isWave) {
     if (g_stage == 3) return 8;
     if (g_stage == 4) return isWave ? 8 : 16;
     return 0;
+}
+
+// Mandatory Geode initialization block
+$execute {
+    log::info("Predictive Input Buffer mod loaded successfully!");
 }
 
 class $modify(GJBaseGameLayer) {
