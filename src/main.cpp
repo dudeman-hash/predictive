@@ -12,7 +12,7 @@ struct DelayedInput {
 
 std::queue<DelayedInput> g_inputQueue;
 int g_currentTick = 0;
-int g_stage = 1; // Default Stage 1 (2 ticks delay)
+int g_stage = 1; 
 
 int getRequiredTicks(bool isWave) {
     if (g_stage == 0) return 0;
@@ -24,7 +24,7 @@ int getRequiredTicks(bool isWave) {
 }
 
 $execute {
-    log::info("Predictive Input Buffer initialization complete.");
+    log::info("Predictive Input Buffer loaded successfully.");
 }
 
 class $modify(PlayerObject) {
@@ -54,22 +54,5 @@ class $modify(PlayerObject) {
         delayed.playerAction = static_cast<int>(btn);
         delayed.targetTick = g_currentTick + requiredTicks;
         g_inputQueue.push(delayed);
-    }
-
-    void update(float dt) {
-        PlayerObject::update(dt);
-        g_currentTick++;
-
-        while (!g_inputQueue.empty() && g_inputQueue.front().targetTick <= g_currentTick) {
-            DelayedInput delayed = g_inputQueue.front();
-            g_inputQueue.pop();
-            
-            PlayerButton btn = static_cast<PlayerButton>(delayed.playerAction);
-            if (delayed.isPress) {
-                PlayerObject::pushButton(btn);
-            } else {
-                PlayerObject::releaseButton(btn);
-            }
-        }
     }
 };
