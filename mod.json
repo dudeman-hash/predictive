@@ -9,5 +9,12 @@
 	"name": "Predictive Input Buffer",
 	"developer": "dudeman-hash",
 	"description": "Predictive input buffering for iOS and Windows.",
+	"dependencies": [
+		{
+			"id": "geode.helper",
+			"version": "v1.0.0",
+			"importance": "required"
+		}
+	],
 	"settings": {}
 }
