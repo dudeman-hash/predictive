@@ -1,21 +1,21 @@
 {
-	"geode": "5.11.2",
+	"geode": "4.0.0",
 	"gd": {
-		"win": "2.2081",
-		"ios": "2.2074",
-		"android": "2.2074"
+		"win": "2.2074",
+		"ios": "2.2074"
 	},
-	"version": "v4.7.0",
-	"id": "tuusuario.predictive-input-buffer",
+	"version": "4.7.0",
+	"id": "tuusuario.predictiveinputbuffer",
 	"name": "Predictive Input Buffer",
 	"developer": "TuUsuario",
-	"description": "Buffer de inputs con etapas ciclables con F6 (2/4/8/16 ticks, con valor distinto para wave).",
+	"description": "Predictive Input Buffer mod recreation for iOS and Windows.",
 	"settings": {
 		"verbose-log": {
 			"type": "bool",
 			"name": "Log detallado",
-			"description": "Imprime en la consola de Geode cada input retrasado.",
+			"description": "Imprime en la consola.",
 			"default": true
 		}
 	}
 }
+
