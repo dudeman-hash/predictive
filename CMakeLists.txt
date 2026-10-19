@@ -7,7 +7,7 @@ include(FetchContent)
 FetchContent_Declare(
     Geode
     GIT_REPOSITORY https://github.com
-    GIT_TAG        v4.1.1
+    GIT_TAG        v4.0.0-beta.1
 )
 FetchContent_MakeAvailable(Geode)
 
