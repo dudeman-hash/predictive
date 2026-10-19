@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 project(predictive_input_buffer VERSION 4.7.0 LANGUAGES CXX)
 
