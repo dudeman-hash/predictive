@@ -28,12 +28,16 @@ $execute {
     log::info("Predictive Input Buffer initialization baseline verified.");
 }
 
-class $modify(MyGJBaseGameLayer, GJBaseGameLayer) {
+class $modify(GJBaseGameLayer) {
     bool init() {
         if (!GJBaseGameLayer::init()) return false;
+        
         g_inputQueue = std::queue<DelayedInput>();
         g_currentTick = 0;
-        this->schedule(schedule_selector(MyGJBaseGameLayer::customTickUpdate));
+
+        // Use a lambda update loop to completely bypass iOS selector compiler bugs
+        this->getScheduler()->scheduleUpdateForTarget(this, 0, false);
+        
         return true;
     }
 
@@ -58,7 +62,9 @@ class $modify(MyGJBaseGameLayer, GJBaseGameLayer) {
         g_inputQueue.push(delayed);
     }
 
-    void customTickUpdate(float dt) {
+    void update(float dt) {
+        GJBaseGameLayer::update(dt);
+        
         g_currentTick++;
         while (!g_inputQueue.empty() && g_inputQueue.front().targetTick <= g_currentTick) {
             DelayedInput delayed = g_inputQueue.front();
