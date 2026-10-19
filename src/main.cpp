@@ -1,18 +1,19 @@
 #include <Geode/Geode.hpp>
-#include <Geode/modify/PlayerObject.hpp>
+#include <Geode/modify/GJBaseGameLayer.hpp>
 #include <queue>
 
 using namespace geode::prelude;
 
 struct DelayedInput {
     bool isPress;
-    int playerAction;
+    int button;
+    bool isPlayer2;
     int targetTick;
 };
 
 std::queue<DelayedInput> g_inputQueue;
 int g_currentTick = 0;
-int g_stage = 1; 
+int g_stage = 1;
 
 int getRequiredTicks(bool isWave) {
     if (g_stage == 0) return 0;
@@ -24,52 +25,45 @@ int getRequiredTicks(bool isWave) {
 }
 
 $execute {
-    log::info("Predictive Input Buffer loaded successfully.");
+    log::info("Predictive Input Buffer initialization baseline verified.");
 }
 
-class $modify(PlayerObject) {
-    void pushButton(PlayerButton btn) {
-        int requiredTicks = getRequiredTicks(m_isDart);
+class $modify(MyGJBaseGameLayer, GJBaseGameLayer) {
+    bool init() {
+        if (!GJBaseGameLayer::init()) return false;
+        g_inputQueue = std::queue<DelayedInput>();
+        g_currentTick = 0;
+        this->schedule(schedule_selector(MyGJBaseGameLayer::customTickUpdate));
+        return true;
+    }
+
+    void handleButton(bool press, int button, bool isPlayer2) {
+        bool isWave = false;
+        auto player = isPlayer2 ? m_player2 : m_player1;
+        if (player) {
+            isWave = player->m_isDart;
+        }
+
+        int requiredTicks = getRequiredTicks(isWave);
         if (requiredTicks == 0) {
-            PlayerObject::pushButton(btn);
+            GJBaseGameLayer::handleButton(press, button, isPlayer2);
             return;
         }
 
         DelayedInput delayed;
-        delayed.isPress = true;
-        delayed.playerAction = static_cast<int>(btn);
+        delayed.isPress = press;
+        delayed.button = button;
+        delayed.isPlayer2 = isPlayer2;
         delayed.targetTick = g_currentTick + requiredTicks;
         g_inputQueue.push(delayed);
     }
 
-    void releaseButton(PlayerButton btn) {
-        int requiredTicks = getRequiredTicks(m_isDart);
-        if (requiredTicks == 0) {
-            PlayerObject::releaseButton(btn);
-            return;
-        }
-
-        DelayedInput delayed;
-        delayed.isPress = false;
-        delayed.playerAction = static_cast<int>(btn);
-        delayed.targetTick = g_currentTick + requiredTicks;
-        g_inputQueue.push(delayed);
-    }
-
-    void update(float dt) {
-        PlayerObject::update(dt);
+    void customTickUpdate(float dt) {
         g_currentTick++;
-
         while (!g_inputQueue.empty() && g_inputQueue.front().targetTick <= g_currentTick) {
             DelayedInput delayed = g_inputQueue.front();
             g_inputQueue.pop();
-            
-            PlayerButton btn = static_cast<PlayerButton>(delayed.playerAction);
-            if (delayed.isPress) {
-                PlayerObject::pushButton(btn);
-            } else {
-                PlayerObject::releaseButton(btn);
-            }
+            GJBaseGameLayer::handleButton(delayed.isPress, delayed.button, delayed.isPlayer2);
         }
     }
 };
