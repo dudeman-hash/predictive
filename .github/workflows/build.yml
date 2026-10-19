@@ -19,20 +19,12 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      # Fix for iOS: Install the missing text tool needed by the Geode script
-      - name: Install Dependencies (macOS/iOS)
-        if: matrix.config.target == 'iOS'
-        run: brew install jq
-
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
           combine: true
           target: ${{ matrix.config.target }}
-          
+          sdk: 'v4.1.1'
   package:
     name: Package builds
     runs-on: ubuntu-latest
