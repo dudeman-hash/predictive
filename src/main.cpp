@@ -24,9 +24,8 @@ int getRequiredTicks(bool isWave) {
     return 0;
 }
 
-// Mandatory Geode initialization block
 $execute {
-    log::info("Predictive Input Buffer mod loaded successfully!");
+    log::info("Mod loaded successfully!");
 }
 
 class $modify(GJBaseGameLayer) {
