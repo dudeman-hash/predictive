@@ -35,7 +35,6 @@ class $modify(GJBaseGameLayer) {
         g_inputQueue = std::queue<DelayedInput>();
         g_currentTick = 0;
 
-        // Use a lambda update loop to completely bypass iOS selector compiler bugs
         this->getScheduler()->scheduleUpdateForTarget(this, 0, false);
         
         return true;
