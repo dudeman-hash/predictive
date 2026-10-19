@@ -55,4 +55,21 @@ class $modify(PlayerObject) {
         delayed.targetTick = g_currentTick + requiredTicks;
         g_inputQueue.push(delayed);
     }
+
+    void update(float dt) {
+        PlayerObject::update(dt);
+        g_currentTick++;
+
+        while (!g_inputQueue.empty() && g_inputQueue.front().targetTick <= g_currentTick) {
+            DelayedInput delayed = g_inputQueue.front();
+            g_inputQueue.pop();
+            
+            PlayerButton btn = static_cast<PlayerButton>(delayed.playerAction);
+            if (delayed.isPress) {
+                PlayerObject::pushButton(btn);
+            } else {
+                PlayerObject::releaseButton(btn);
+            }
+        }
+    }
 };
