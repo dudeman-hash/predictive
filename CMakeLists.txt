@@ -1,17 +1,19 @@
-cmake_minimum_required(VERSION 3.21)
-set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+cmake_minimum_required(VERSION 3.25)
 
-project(PredictiveInputBuffer VERSION 4.7.0)
+project(predictive-input-buffer VERSION 4.7.0 LANGUAGES CXX)
 
-add_library(${PROJECT_NAME} SHARED src/main.cpp)
+include(FetchContent)
+FetchContent_Declare(
+    Geode
+    GIT_REPOSITORY https://github.com
+    GIT_TAG        main
+)
+FetchContent_MakeAvailable(Geode)
 
-if (NOT DEFINED ENV{GEODE_SDK})
-    message(FATAL_ERROR "Define la variable de entorno GEODE_SDK")
-endif()
+add_geode_mod(
+    ${PROJECT_NAME}
+    ${PROJECT_VERSION}
+    SOURCES 
+        src/main.cpp
+)
 
-add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
-setup_geode_mod(${PROJECT_NAME})
