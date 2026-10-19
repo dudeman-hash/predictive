@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(predictive-input-buffer VERSION 4.7.0 LANGUAGES CXX)
+project(predictive_input_buffer VERSION 4.7.0 LANGUAGES CXX)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -16,4 +16,3 @@ add_geode_mod(
     SOURCES 
         src/main.cpp
 )
-
