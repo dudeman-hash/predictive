@@ -1,19 +1,32 @@
-cmake_minimum_required(VERSION 3.25)
-set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+cmake_minimum_required(VERSION 3.21)
 
-project(predictive_input_buffer VERSION 1.0.0 LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-include(FetchContent)
-FetchContent_Declare(
-    Geode
-    GIT_REPOSITORY https://github.com
-    GIT_TAG        v4.0.0-beta.1
-)
-FetchContent_MakeAvailable(Geode)
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR IOS)
+    set(CMAKE_OSX_ARCHITECTURES "arm64")
+else()
+    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
+endif()
 
-add_geode_mod(
-    ${PROJECT_NAME}
-    ${PROJECT_VERSION}
-    SOURCES 
-        src/main.cpp
-)
+project(predictive_input_buffer VERSION 1.0.0)
+
+add_library(${PROJECT_NAME} SHARED src/main.cpp)
+
+if (NOT DEFINED ENV{GEODE_SDK})
+    message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
+else()
+    message(STATUS "Found Geode: $ENV{GEODE_SDK}")
+endif()
+
+add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
+setup_geode_mod(${PROJECT_NAME})
+
+# The generated 2.2081 bindings use a few complete types without including
+# their definitions directly. Provide Geode's full bindings header to them.
+if (TARGET GeodeBindings)
+    target_precompile_headers(GeodeBindings PRIVATE
+        "$ENV{GEODE_SDK}/loader/include/Geode/Bindings.hpp"
+    )
+endif()
