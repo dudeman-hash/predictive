@@ -1,20 +1,13 @@
 {
-	"geode": "3.13.0",
+	"geode": "4.0.0",
 	"gd": {
-		"win": "2.206",
-		"ios": "2.206"
+		"win": "2.2081",
+		"ios": "2.2081"
 	},
-	"version": "4.7.0",
-	"id": "tuusuario.predictiveinputbuffer",
+	"version": "1.0.0",
+	"id": "dudemanhash.predictiveinputbuffer",
 	"name": "Predictive Input Buffer",
-	"developer": "TuUsuario",
-	"description": "Predictive Input Buffer mod recreation for iOS and Windows.",
-	"settings": {
-		"verbose-log": {
-			"type": "bool",
-			"name": "Log detallado",
-			"description": "Imprime en la consola.",
-			"default": true
-		}
-	}
+	"developer": "dudeman-hash",
+	"description": "Predictive input buffering for iOS and Windows.",
+	"settings": {}
 }
